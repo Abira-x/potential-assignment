@@ -1,0 +1,28 @@
+version: '2'
+services:
+  database:
+    image: mysql:latest
+    ports:
+      - 3306
+    environment:
+      MYSQL_ROOT_PASSWORD: dummy12345
+      MYSQL_USER: root
+      MYSQL_PASSWORD: dummy12345
+      MYSQL_DATABASE: ordersamples
+  tomcat:
+    image: ncodefresh/tomcat7:7.0.75
+    ports:
+      - 8081
+    links:
+      - app
+    volumes_from:
+      - app
+  app:
+    image: ${{build_image}}
+    volumes:
+      - wars:/opt/tomcat/webapps
+    links:
+      - database
+volumes:
+  wars:
+    driver: local
